@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {useDispatch} from 'react-redux';
+import { loginUser, registerUser } from "../../../_action/user_action";
 
 function Copyright() {
   return (
@@ -46,16 +48,57 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RegisterPage() {
+export default function RegisterPage(props) {
   const classes = useStyles();
+
+  const [Email, setEmail] = useState("")
+  const [Name, setName] = useState("")
+  const [Password, setPassword] = useState("")
+  const [ConfirmPassword, setConfirmPassword] = useState("")
+
+  const dispatch = useDispatch();
+
+  const onNameHandler = (event) => {
+    setName(event.currentTarget.value)
+  }
+  const onEmailHandler = (event) =>{
+    setEmail(event.currentTarget.value)
+  }
+  const onPasswordHandler = (event) =>{
+    setPassword(event.currentTarget.value)
+  }
+  const onConfirmPasswordHandler = (event) =>{
+    setConfirmPassword(event.currentTarget.value)
+  }
+  const onSubmitHandler = (event) =>{
+    event.preventDefault();
+
+    if(Password !== ConfirmPassword) {
+      return alert("비밀번호가 다릅니다.")
+    }
+
+    let body = {
+      email: Email,
+      password: Password,
+      name: Name,
+    }
+
+    dispatch(registerUser(body))
+    .then(response => {
+      if(response.payload.success) {
+        props.history.push('/login')
+      } else{
+        alert('fail to register')
+      }
+    })
+
+    
+  }
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */}
         <Typography component="h1" variant="h5">
           회원 가입
         </Typography>
@@ -63,6 +106,8 @@ export default function RegisterPage() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                value={Name}
+                onChange={onNameHandler}
                 autoComplete="name"
                 name="Name"
                 variant="outlined"
@@ -73,19 +118,10 @@ export default function RegisterPage() {
                 autoFocus
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid> */}
             <Grid item xs={12}>
               <TextField
+              value={Email}
+              onChange={onEmailHandler}
                 variant="outlined"
                 required
                 fullWidth
@@ -97,6 +133,8 @@ export default function RegisterPage() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+              value={Password}
+              onChange={onPasswordHandler}
                 variant="outlined"
                 required
                 fullWidth
@@ -108,6 +146,20 @@ export default function RegisterPage() {
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+              value={ConfirmPassword}
+              onChange={onConfirmPasswordHandler}
+                variant="outlined"
+                required
+                fullWidth
+                name="passwordConfirm"
+                label="passwordConfirm"
+                type="password"
+                id="passwordConfirm"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
               {/* <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
@@ -115,6 +167,7 @@ export default function RegisterPage() {
             </Grid>
           </Grid>
           <Button
+          onClick={onSubmitHandler}
             type="submit"
             fullWidth
             variant="contained"
