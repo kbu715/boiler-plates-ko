@@ -69,7 +69,7 @@ app.post("/api/users/kakaologin", (req, res) => {
   const {
     profile: {
       id,
-      kakao_account: { email, gender, is_email_verified },
+      kakao_account: { email,  is_email_verified  },
       properties: { nickname },
     },
   } = data;
@@ -128,7 +128,6 @@ app.post("/api/users/register", (req, res) => {
 });
 
 app.get('/api/users/auth', auth , (req, res)=>{
-    console.log(1);
     res.status(200).json({
         _id: req.user._id,
         isAdmin: req.user.role === 0 ? false : true,
@@ -140,7 +139,6 @@ app.get('/api/users/auth', auth , (req, res)=>{
 
 //logout => token을 지워주면됨
 app.get('/api/users/logout', auth, (req, res)=>{
-  console.log(123);
     User.findOneAndUpdate({_id : req.user._id}, {token:""}, (err, user)=>{
         if(err) {
             return res.json({success: false, err});}

@@ -16,6 +16,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Link from '@material-ui/core/Link';
 const useStyles = makeStyles((theme) => ({
+  barbar: {
+    backgroundColor: "#1a1a1c",
+  },
   grow: {
     flexGrow: 1,
   },
@@ -116,7 +119,7 @@ export default function NavbarPage() {
       onClose={handleMenuClose}
     >
 
-      <MenuItem onClick={handleMenuClose}>      
+      {/* <MenuItem onClick={handleMenuClose}>      
       <Link color="inherit" href="/login">
         Login
       </Link>
@@ -125,7 +128,7 @@ export default function NavbarPage() {
       <Link color="inherit" href="/register">
         Sign-Up
       </Link>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
@@ -175,15 +178,15 @@ export default function NavbarPage() {
   return (
     <div className={classes.grow}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
+        <Toolbar className={classes.barbar}>
+          {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
             SG
           </Typography>

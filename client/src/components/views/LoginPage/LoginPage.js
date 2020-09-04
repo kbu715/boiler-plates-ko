@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -8,7 +7,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -85,10 +83,13 @@ export default function LoginPage(props) {
   };
       const responseKaKao = (response) => {
         const data = response;
-        axios.post("http://localhost:5000/api/users/kakaologin", data, {
+        axios
+        .post("http://localhost:5000/api/users/kakaologin", data, {
           withCredentials: true,
-        }).then((response) => {
+        })
+        .then((response) => {
           if (response.data.loginSuccess) {
+            console.log(123);
             window.localStorage.setItem("userId", response.data.userId);
             props.history.push("/");
           } else {
