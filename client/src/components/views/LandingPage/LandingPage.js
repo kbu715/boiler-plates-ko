@@ -6,7 +6,7 @@ function LandingPage(props) {
     const onClickHandler = ()=>{
         axios.get('http://localhost:5000/api/users/logout',{withCredentials:true})
         .then(response => {
-            console.log(response);
+            console.log(response.data);
             if(response.data.success){
                 props.history.push('/login')
             } else {

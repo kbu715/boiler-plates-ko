@@ -12,8 +12,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import {useDispatch} from 'react-redux';
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../../_action/user_action";
+import axios from "axios";
+import SocialLogin from "./SocialLogin";
 
 function Copyright() {
   return (
@@ -56,33 +58,44 @@ export default function LoginPage(props) {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
 
-  const onEmailHandler = (event) =>{
-    setEmail(event.currentTarget.value)
-  }
+  const onEmailHandler = (event) => {
+    setEmail(event.currentTarget.value);
+  };
 
-  const onPasswordHandler = (event) =>{
-    setPassword(event.currentTarget.value)
-  }
+  const onPasswordHandler = (event) => {
+    setPassword(event.currentTarget.value);
+  };
 
-  const onSubmitHandler = (event) =>{
+  const onSubmitHandler = (event) => {
     event.preventDefault();
 
     let body = {
       email: Email,
       password: Password,
-    }
+    };
 
-    dispatch(loginUser(body))
-    .then(response => {
-      if(response.payload.loginSuccess) {
-        props.history.push('/')
-      } else{
-        alert("Fail")
+    dispatch(loginUser(body)).then((response) => {
+      if (response.payload.loginSuccess) {
+        props.history.push("/");
+      } else {
+        alert("Fail");
       }
-    })
+    });
 
-    
-  }
+  };
+      const responseKaKao = (response) => {
+        const data = response;
+        axios.post("http://localhost:5000/api/users/kakaologin", data, {
+          withCredentials: true,
+        }).then((response) => {
+          if (response.data.loginSuccess) {
+            window.localStorage.setItem("userId", response.data.userId);
+            props.history.push("/");
+          } else {
+            alert("로그인 실패");
+          }
+        });
+      };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -126,7 +139,7 @@ export default function LoginPage(props) {
             label="Remember me"
           />
           <Button
-          onClick={onSubmitHandler}
+            onClick={onSubmitHandler}
             type="submit"
             fullWidth
             variant="contained"
@@ -135,6 +148,7 @@ export default function LoginPage(props) {
           >
             Sign In
           </Button>
+          <SocialLogin responseKaKao={responseKaKao} />
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
